@@ -2,7 +2,7 @@
 A mod that enhances the inventory management by adding various additional functions to the usual mouse buttons.
 
 #How to build
-- Set up MCP v6.2 for Minecraft 1.2.5 with Forge.
+- Set up MCP v4.4 for Minecraft Beta 1.8.1 with ModLoader.
 - Copy stuff from this repository into `src/minecraft/`.
 - Recompile / reobfuscate.
 

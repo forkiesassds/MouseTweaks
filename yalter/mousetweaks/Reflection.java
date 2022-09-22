@@ -23,7 +23,7 @@ public class Reflection {
 
 		try {
 			Method m = getMethod(GuiContainer.class, getObfuscatedName(Constants.GETSLOTATPOSITION_NAME), int.class, int.class);
-			guiContainerClass.storeMethod(Constants.GETSLOTATPOSITION_NAME.forgeName, m);
+			guiContainerClass.storeMethod(Constants.GETSLOTATPOSITION_NAME.mcpName, m);
 		} catch (NoSuchMethodException e) {
 			Logger.Log("Could not retrieve GuiContainer.getSlotAtPosition().");
 			guiContainerClass = null;
@@ -31,24 +31,6 @@ public class Reflection {
 		}
 
 		Logger.Log("Success.");
-	}
-
-	public static Method getHMCMethod(GuiContainer object) {
-		if (HMCCache.containsKey(object.getClass())) {
-			return HMCCache.get(object.getClass());
-		}
-
-		try {
-			Method method = searchMethod(object.getClass(), getObfuscatedName(Constants.HANDLEMOUSECLICK_NAME), Slot.class, int.class, int.class, boolean.class);
-
-			Logger.DebugLog("Found handleMouseClick() for " + object.getClass().getSimpleName() + ", caching.");
-
-			HMCCache.put(object.getClass(), method);
-			return method;
-		} catch (NoSuchMethodException e) {
-			ModLoader.throwException("MouseTweaks could not find handleMouseClick() in a GuiContainer.", e);
-			return null;
-		}
 	}
 
 	static boolean doesClassExist(String name) {
@@ -118,12 +100,7 @@ public class Reflection {
 			getMethod(GuiContainer.class, Constants.GETSLOTATPOSITION_NAME.mcpName, int.class, int.class);
 			obfuscation = Obfuscation.MCP;
 		} catch (NoSuchMethodException e) {
-			try {
-				getMethod(GuiContainer.class, Constants.GETSLOTATPOSITION_NAME.forgeName, int.class, int.class);
-				obfuscation = Obfuscation.FORGE;
-			} catch (NoSuchMethodException ex) {
-				obfuscation = Obfuscation.VANILLA;
-			}
+			obfuscation = Obfuscation.VANILLA;
 		}
 
 		Logger.Log("Detected obfuscation: " + obfuscation + ".");

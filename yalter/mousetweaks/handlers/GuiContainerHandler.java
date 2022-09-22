@@ -17,12 +17,10 @@ import java.util.List;
 public class GuiContainerHandler implements IGuiScreenHandler {
 	protected Minecraft mc;
 	protected GuiContainer guiContainer;
-	protected Method handleMouseClick;
 
 	public GuiContainerHandler(GuiContainer guiContainer) {
 		this.mc = ModLoader.getMinecraftInstance();
 		this.guiContainer = guiContainer;
-		this.handleMouseClick = Reflection.getHMCMethod(guiContainer);
 	}
 
 	private int getDisplayWidth() {
@@ -62,9 +60,9 @@ public class GuiContainerHandler implements IGuiScreenHandler {
 	@Override
 	public Slot getSlotUnderMouse() {
 		try {
-			return (Slot)Reflection.guiContainerClass.invokeMethod(guiContainer, Constants.GETSLOTATPOSITION_NAME.forgeName, getRequiredMouseX(), getRequiredMouseY());
+			return (Slot)Reflection.guiContainerClass.invokeMethod(guiContainer, Constants.GETSLOTATPOSITION_NAME.mcpName, getRequiredMouseX(), getRequiredMouseY());
 		} catch (InvocationTargetException e) {
-			ModLoader.throwException("GuiContainer.getSlotAtPosition() threw an exception when called from MouseTweaks.", e);
+			ModLoader.ThrowException("GuiContainer.getSlotAtPosition() threw an exception when called from MouseTweaks.", e);
 			return null;
 		}
 	}
@@ -76,17 +74,11 @@ public class GuiContainerHandler implements IGuiScreenHandler {
 
 	@Override
 	public void clickSlot(Slot slot, MouseButton mouseButton, boolean shiftPressed) {
-		try {
-			handleMouseClick.invoke(guiContainer,
-			                        slot,
-			                        slot.slotNumber,
-			                        mouseButton.getValue(),
-			                        shiftPressed);
-		} catch (InvocationTargetException e) {
-			ModLoader.throwException("handleMouseClick() threw an exception when called from MouseTweaks.", e);
-		} catch (IllegalAccessException e) {
-			ModLoader.throwException("Calling handleMouseClick() from MouseTweaks.", e);
-		}
+		mc.playerController.windowClick(guiContainer.inventorySlots.windowId,
+			slot.slotNumber,
+			mouseButton.getValue(),
+			shiftPressed,
+			mc.thePlayer);
 	}
 
 	@Override
