@@ -74,11 +74,15 @@ public class GuiContainerHandler implements IGuiScreenHandler {
 
 	@Override
 	public void clickSlot(Slot slot, MouseButton mouseButton, boolean shiftPressed) {
-		mc.playerController.windowClick(guiContainer.inventorySlots.windowId,
-			slot.slotNumber,
-			mouseButton.getValue(),
-			shiftPressed,
-			mc.thePlayer);
+		try {
+			mc.playerController.windowClick(guiContainer.inventorySlots.windowId,
+					slot.slotNumber,
+					mouseButton.getValue(),
+					shiftPressed,
+					mc.thePlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
